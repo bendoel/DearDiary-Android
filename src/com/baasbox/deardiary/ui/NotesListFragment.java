@@ -2,10 +2,20 @@ package com.baasbox.deardiary.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.baasbox.android.BaasDocument;
+import com.baasbox.deardiary.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +69,12 @@ public class NotesListFragment extends ListFragment {
         if (savedInstanceState != null
             && savedInstanceState.containsKey(CURRENTLY_SELECTED_ITEM_KEY))
             setActivatedPosition(savedInstanceState.getInt(CURRENTLY_SELECTED_ITEM_KEY));
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -110,6 +126,39 @@ public class NotesListFragment extends ListFragment {
             getListView().setItemChecked(position,true);
         }
         mSelectedPostion = position;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        registerForContextMenu(getListView());
+//        setHasOptionsMenu(true);
+    }
+
+    //add context menu on bottom layout of view /screen :)
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.list_menu_option, menu);
+//    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+//        if(v.getId()== R.id.ItemList){
+            String[] menuItems = getResources().getStringArray(R.array.menu);
+            for (int i=0; i<menuItems.length; i++){
+                menu.add(Menu.NONE,i, i, menuItems[i] );
+            }
+//        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int menuItemIndex = item.getItemId();
+        return true;
     }
 
 }
